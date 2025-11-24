@@ -1,0 +1,372 @@
+{
+    "title": "RWOL - User Activity",
+    "description": "User sessions analytics for all your RUM applications. (cloned)",
+    "widgets": [
+        {
+            "id": 5351015146327870,
+            "definition": {
+                "title": "View Traffic Overview",
+                "title_align": "left",
+                "background_color": "white",
+                "show_title": true,
+                "type": "group",
+                "layout_type": "ordered",
+                "widgets": [
+                    {
+                        "id": 1116043179991225,
+                        "definition": {
+                            "title": "Views by Measure Metric",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "show_legend": true,
+                            "legend_layout": "horizontal",
+                            "legend_columns": [
+                                "avg",
+                                "min",
+                                "max",
+                                "value",
+                                "sum"
+                            ],
+                            "time": {},
+                            "type": "timeseries",
+                            "requests": [
+                                {
+                                    "formulas": [
+                                        {
+                                            "number_format": {
+                                                "unit": {
+                                                    "type": "canonical_unit",
+                                                    "unit_name": "view"
+                                                }
+                                            },
+                                            "formula": "default_zero(trafficChanges)"
+                                        }
+                                    ],
+                                    "queries": [
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "trafficChanges",
+                                            "query": "sum:rum.measure.view{*} by {view.name}.as_count()",
+                                            "aggregator": "sum"
+                                        }
+                                    ],
+                                    "response_format": "timeseries",
+                                    "style": {
+                                        "order_by": "values",
+                                        "palette": "classic",
+                                        "line_type": "solid",
+                                        "line_width": "normal"
+                                    },
+                                    "display_type": "bars"
+                                }
+                            ]
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 6,
+                            "height": 4
+                        }
+                    },
+                    {
+                        "id": 4471230137152128,
+                        "definition": {
+                            "title": "Views by Session",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "show_legend": true,
+                            "legend_layout": "horizontal",
+                            "legend_columns": [
+                                "avg",
+                                "min",
+                                "max",
+                                "value",
+                                "sum"
+                            ],
+                            "time": {},
+                            "type": "timeseries",
+                            "requests": [
+                                {
+                                    "formulas": [
+                                        {
+                                            "alias": "Sessions",
+                                            "formula": "query3"
+                                        }
+                                    ],
+                                    "queries": [
+                                        {
+                                            "name": "query3",
+                                            "data_source": "rum",
+                                            "search": {
+                                                "query": "@type:view $service $version $applicationId $country $device $OS $browser $env $sessionType"
+                                            },
+                                            "indexes": [
+                                                "*"
+                                            ],
+                                            "group_by": [
+                                                {
+                                                    "facet": "@view.name",
+                                                    "limit": 10,
+                                                    "sort": {
+                                                        "aggregation": "count",
+                                                        "order": "desc",
+                                                        "metric": "count"
+                                                    }
+                                                }
+                                            ],
+                                            "compute": {
+                                                "aggregation": "count"
+                                            },
+                                            "storage": "hot"
+                                        }
+                                    ],
+                                    "response_format": "timeseries",
+                                    "style": {
+                                        "palette": "purple",
+                                        "line_type": "solid",
+                                        "line_width": "normal"
+                                    },
+                                    "display_type": "bars"
+                                }
+                            ],
+                            "yaxis": {
+                                "scale": "linear",
+                                "label": "",
+                                "include_zero": true,
+                                "min": "auto",
+                                "max": "auto"
+                            },
+                            "markers": []
+                        },
+                        "layout": {
+                            "x": 6,
+                            "y": 0,
+                            "width": 6,
+                            "height": 4
+                        }
+                    }
+                ]
+            },
+            "layout": {
+                "x": 0,
+                "y": 0,
+                "width": 12,
+                "height": 5
+            }
+        },
+        {
+            "id": 5,
+            "definition": {
+                "title": "Session Overview",
+                "show_title": true,
+                "type": "group",
+                "layout_type": "ordered",
+                "widgets": [
+                    {
+                        "id": 6081864828449787,
+                        "definition": {
+                            "title": "RUM Sessions",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "time": {},
+                            "requests": [
+                                {
+                                    "response_format": "event_list",
+                                    "query": {
+                                        "query_string": "@type:session",
+                                        "data_source": "rum_stream",
+                                        "indexes": []
+                                    },
+                                    "columns": [
+                                        {
+                                            "field": "has_replay",
+                                            "width": "auto"
+                                        },
+                                        {
+                                            "field": "status",
+                                            "width": "auto"
+                                        },
+                                        {
+                                            "field": "timestamp",
+                                            "width": "auto"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@session.type"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@session.time_spent"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@session.view.count"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@session.error.count"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@session.action.count"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@session.initial_view.name"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@session.last_view.name"
+                                        },
+                                        {
+                                            "field": "@session.matching_retention_filter.name",
+                                            "width": "auto"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "list_stream"
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 12,
+                            "height": 3
+                        }
+                    },
+                    {
+                        "id": 8288897320812054,
+                        "definition": {
+                            "title": "RUM Views",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "time": {},
+                            "requests": [
+                                {
+                                    "response_format": "event_list",
+                                    "query": {
+                                        "query_string": "@type:view",
+                                        "data_source": "rum_stream",
+                                        "indexes": []
+                                    },
+                                    "columns": [
+                                        {
+                                            "field": "has_replay",
+                                            "width": "auto"
+                                        },
+                                        {
+                                            "field": "status",
+                                            "width": "auto"
+                                        },
+                                        {
+                                            "field": "timestamp",
+                                            "width": "auto"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@view.name"
+                                        },
+                                        {
+                                            "field": "@view.error.count",
+                                            "width": "auto"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@view.frustration.count"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@view.loading_type"
+                                        },
+                                        {
+                                            "width": "auto",
+                                            "field": "@view.loading_time"
+                                        },
+                                        {
+                                            "field": "@usr.name",
+                                            "width": "auto"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "list_stream"
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 3,
+                            "width": 12,
+                            "height": 4
+                        }
+                    }
+                ]
+            },
+            "layout": {
+                "x": 0,
+                "y": 5,
+                "width": 12,
+                "height": 8,
+                "is_column_break": true
+            }
+        }
+    ],
+    "template_variables": [
+        {
+            "name": "service",
+            "prefix": "service",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "version",
+            "prefix": "version",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "applicationId",
+            "prefix": "@application.id",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "country",
+            "prefix": "@geo.country",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "device",
+            "prefix": "@device.type",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "OS",
+            "prefix": "@os.name",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "browser",
+            "prefix": "@browser.name",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "env",
+            "prefix": "env",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "sessionType",
+            "prefix": "@session.type",
+            "available_values": [],
+            "default": "\"user\""
+        }
+    ],
+    "layout_type": "ordered",
+    "notify_list": [],
+    "reflow_type": "fixed",
+    "pause_auto_refresh": false
+}

@@ -1,0 +1,739 @@
+{
+    "title": "RWOL - Web App Performance",
+    "description": "Performance overview of all your RUM web applications.",
+    "widgets": [
+        {
+            "id": 239765592704958,
+            "definition": {
+                "title": "New group",
+                "banner_img": "/static/images/integration_dashboard/rum_web_app_performance_illustration.jpg",
+                "show_title": false,
+                "type": "group",
+                "layout_type": "ordered",
+                "widgets": [
+                    {
+                        "id": 452762391182984,
+                        "definition": {
+                            "type": "note",
+                            "content": "## RUM Web App Performance\n\nThis dashboard offers a bird’s-eye view of RUM applications. It helps with analyzing:\n\n**Core Web Vitals**: For all views, three browser performance metrics are highlighted: Largest Contentful Paint, Interaction to Next Paint, and Cumulative Layout Shift. Other performance metrics, such as Load Time, are also available.",
+                            "background_color": "transparent",
+                            "font_size": "14",
+                            "text_align": "left",
+                            "show_tick": false,
+                            "tick_pos": "50%",
+                            "tick_edge": "left"
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 6,
+                            "height": 2
+                        }
+                    }
+                ]
+            },
+            "layout": {
+                "x": 0,
+                "y": 0,
+                "width": 6,
+                "height": 5
+            }
+        },
+        {
+            "id": 7820579613627546,
+            "definition": {
+                "title": "Overview",
+                "background_color": "vivid_purple",
+                "show_title": true,
+                "type": "group",
+                "layout_type": "ordered",
+                "widgets": [
+                    {
+                        "id": 38632178312,
+                        "definition": {
+                            "title": "Total page views",
+                            "type": "query_value",
+                            "requests": [
+                                {
+                                    "response_format": "scalar",
+                                    "queries": [
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query1",
+                                            "query": "sum:rum.measure.view{*}.as_count()",
+                                            "aggregator": "avg"
+                                        }
+                                    ],
+                                    "formulas": [
+                                        {
+                                            "formula": "query1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "autoscale": true,
+                            "precision": 2
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 3,
+                            "height": 2
+                        }
+                    },
+                    {
+                        "id": 5319627452696350,
+                        "definition": {
+                            "title": "P75 loading time",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "type": "query_value",
+                            "requests": [
+                                {
+                                    "response_format": "scalar",
+                                    "queries": [
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query1",
+                                            "query": "p75:rum.measure.view.loading_time{*}",
+                                            "aggregator": "percentile"
+                                        }
+                                    ],
+                                    "formulas": [
+                                        {
+                                            "formula": "query1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "autoscale": true,
+                            "precision": 2
+                        },
+                        "layout": {
+                            "x": 3,
+                            "y": 0,
+                            "width": 3,
+                            "height": 2
+                        }
+                    },
+                    {
+                        "id": 3131817108707352,
+                        "definition": {
+                            "title": "Error Count",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "show_legend": true,
+                            "legend_layout": "vertical",
+                            "legend_columns": [
+                                "avg",
+                                "min",
+                                "max",
+                                "value"
+                            ],
+                            "type": "timeseries",
+                            "requests": [
+                                {
+                                    "formulas": [
+                                        {
+                                            "formula": "query2"
+                                        }
+                                    ],
+                                    "response_format": "timeseries",
+                                    "queries": [
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query2",
+                                            "query": "sum:rum.measure.error{*} by {view.name}.as_count()"
+                                        }
+                                    ],
+                                    "style": {
+                                        "palette": "dog_classic",
+                                        "line_type": "solid",
+                                        "line_width": "normal"
+                                    },
+                                    "display_type": "bars"
+                                }
+                            ],
+                            "yaxis": {
+                                "include_zero": true,
+                                "scale": "linear",
+                                "label": "",
+                                "min": "auto",
+                                "max": "auto"
+                            },
+                            "markers": []
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 2,
+                            "width": 6,
+                            "height": 2
+                        }
+                    }
+                ]
+            },
+            "layout": {
+                "x": 6,
+                "y": 0,
+                "width": 6,
+                "height": 5
+            }
+        },
+        {
+            "id": 6086633017373876,
+            "definition": {
+                "title": "Core Web Vitals",
+                "background_color": "white",
+                "show_title": true,
+                "type": "group",
+                "layout_type": "ordered",
+                "widgets": [
+                    {
+                        "id": 2055322028691454,
+                        "definition": {
+                            "title": "Loading Time",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "show_legend": true,
+                            "legend_layout": "vertical",
+                            "legend_columns": [
+                                "avg",
+                                "min",
+                                "max",
+                                "value",
+                                "sum"
+                            ],
+                            "type": "timeseries",
+                            "requests": [
+                                {
+                                    "formulas": [
+                                        {
+                                            "alias": "p75 LT",
+                                            "number_format": {
+                                                "unit": {
+                                                    "type": "canonical_unit",
+                                                    "unit_name": "nanosecond"
+                                                }
+                                            },
+                                            "formula": "vitalQuery"
+                                        }
+                                    ],
+                                    "queries": [
+                                        {
+                                            "name": "vitalQuery",
+                                            "data_source": "metrics",
+                                            "query": "avg:rum.measure.view.loading_time{*} by {view.name}"
+                                        }
+                                    ],
+                                    "response_format": "timeseries",
+                                    "style": {
+                                        "palette": "dog_classic",
+                                        "line_type": "solid",
+                                        "line_width": "normal"
+                                    },
+                                    "display_type": "line"
+                                }
+                            ],
+                            "yaxis": {
+                                "scale": "linear",
+                                "label": "",
+                                "include_zero": true,
+                                "min": "auto",
+                                "max": "auto"
+                            },
+                            "markers": [
+                                {
+                                    "value": "y > 4000000000",
+                                    "display_type": "error solid"
+                                },
+                                {
+                                    "value": "2500000000 < y < 4000000000",
+                                    "display_type": "warning solid"
+                                },
+                                {
+                                    "value": "y < 2500000000",
+                                    "display_type": "ok solid"
+                                }
+                            ]
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 6,
+                            "height": 3
+                        }
+                    },
+                    {
+                        "id": 2620511991504774,
+                        "definition": {
+                            "title": "Largest Contentful Paint",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "show_legend": true,
+                            "legend_layout": "vertical",
+                            "legend_columns": [
+                                "avg",
+                                "min",
+                                "max",
+                                "value"
+                            ],
+                            "type": "timeseries",
+                            "requests": [
+                                {
+                                    "formulas": [
+                                        {
+                                            "formula": "query2"
+                                        }
+                                    ],
+                                    "response_format": "timeseries",
+                                    "queries": [
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query2",
+                                            "query": "avg:rum.measure.view.largest_contentful_paint{*} by {view.name}"
+                                        }
+                                    ],
+                                    "style": {
+                                        "palette": "dog_classic",
+                                        "line_type": "solid",
+                                        "line_width": "normal"
+                                    },
+                                    "display_type": "line"
+                                }
+                            ],
+                            "yaxis": {
+                                "include_zero": true,
+                                "scale": "linear",
+                                "label": "",
+                                "min": "auto",
+                                "max": "auto"
+                            },
+                            "markers": [
+                                {
+                                    "label": " > 4s ",
+                                    "value": "y > 4000000000",
+                                    "display_type": "error solid"
+                                },
+                                {
+                                    "value": "2500000000 < y < 4000000000",
+                                    "display_type": "warning solid"
+                                },
+                                {
+                                    "value": "y < 2500000000",
+                                    "display_type": "ok solid"
+                                }
+                            ]
+                        },
+                        "layout": {
+                            "x": 6,
+                            "y": 0,
+                            "width": 6,
+                            "height": 3
+                        }
+                    },
+                    {
+                        "id": 2235659035954080,
+                        "definition": {
+                            "title": "Interaction to Next Paint",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "show_legend": true,
+                            "legend_layout": "vertical",
+                            "legend_columns": [
+                                "avg",
+                                "min",
+                                "max",
+                                "value"
+                            ],
+                            "type": "timeseries",
+                            "requests": [
+                                {
+                                    "formulas": [
+                                        {
+                                            "formula": "query2"
+                                        }
+                                    ],
+                                    "response_format": "timeseries",
+                                    "queries": [
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query2",
+                                            "query": "avg:rum.measure.view.interaction_to_next_paint{*} by {view.name}"
+                                        }
+                                    ],
+                                    "style": {
+                                        "palette": "dog_classic",
+                                        "line_type": "solid",
+                                        "line_width": "normal"
+                                    },
+                                    "display_type": "line"
+                                }
+                            ],
+                            "yaxis": {
+                                "include_zero": true,
+                                "scale": "linear",
+                                "label": "",
+                                "min": "auto",
+                                "max": "auto"
+                            },
+                            "markers": [
+                                {
+                                    "label": " > 500ms ",
+                                    "value": "y > 500000000",
+                                    "display_type": "error solid"
+                                },
+                                {
+                                    "value": "200000000 < y < 500000000",
+                                    "display_type": "warning solid"
+                                },
+                                {
+                                    "value": "y < 200000000",
+                                    "display_type": "ok solid"
+                                }
+                            ]
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 3,
+                            "width": 6,
+                            "height": 3
+                        }
+                    },
+                    {
+                        "id": 3805422232033630,
+                        "definition": {
+                            "title": "First Contentful Paint",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "show_legend": true,
+                            "legend_layout": "vertical",
+                            "legend_columns": [
+                                "avg",
+                                "min",
+                                "max",
+                                "value",
+                                "sum"
+                            ],
+                            "type": "timeseries",
+                            "requests": [
+                                {
+                                    "formulas": [
+                                        {
+                                            "alias": "p75 FCP",
+                                            "number_format": {
+                                                "unit": {
+                                                    "type": "canonical_unit",
+                                                    "unit_name": "nanosecond"
+                                                }
+                                            },
+                                            "formula": "vitalQuery"
+                                        }
+                                    ],
+                                    "queries": [
+                                        {
+                                            "name": "vitalQuery",
+                                            "data_source": "metrics",
+                                            "query": "avg:rum.measure.view.first_contentful_paint{*} by {view.name}"
+                                        }
+                                    ],
+                                    "response_format": "timeseries",
+                                    "style": {
+                                        "palette": "dog_classic",
+                                        "line_type": "solid",
+                                        "line_width": "normal"
+                                    },
+                                    "display_type": "line"
+                                }
+                            ],
+                            "yaxis": {
+                                "scale": "linear",
+                                "label": "",
+                                "include_zero": true,
+                                "min": "auto",
+                                "max": "auto"
+                            },
+                            "markers": [
+                                {
+                                    "value": "y > 3000000000",
+                                    "display_type": "error solid"
+                                },
+                                {
+                                    "value": "1800000000 < y < 3000000000",
+                                    "display_type": "warning solid"
+                                },
+                                {
+                                    "value": "y < 1800000000",
+                                    "display_type": "ok solid"
+                                }
+                            ]
+                        },
+                        "layout": {
+                            "x": 6,
+                            "y": 3,
+                            "width": 6,
+                            "height": 3
+                        }
+                    },
+                    {
+                        "id": 1167310462324884,
+                        "definition": {
+                            "title": "Performance overview of the most popular pages",
+                            "title_size": "16",
+                            "title_align": "left",
+                            "type": "query_table",
+                            "requests": [
+                                {
+                                    "response_format": "scalar",
+                                    "queries": [
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query1",
+                                            "query": "sum:rum.measure.view{*} by {view.name}.as_count()",
+                                            "aggregator": "sum"
+                                        },
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query2",
+                                            "query": "avg:rum.measure.view.loading_time{*} by {view.name}",
+                                            "aggregator": "avg"
+                                        },
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query3",
+                                            "query": "avg:rum.measure.view.largest_contentful_paint{*} by {view.name}",
+                                            "aggregator": "avg"
+                                        },
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query4",
+                                            "query": "avg:rum.measure.view.interaction_to_next_paint{*} by {view.name}",
+                                            "aggregator": "avg"
+                                        },
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query5",
+                                            "query": "avg:rum.measure.view.first_contentful_paint{*} by {view.name}",
+                                            "aggregator": "avg"
+                                        },
+                                        {
+                                            "data_source": "metrics",
+                                            "name": "query6",
+                                            "query": "avg:rum.measure.view.cumulative_layout_shift{*} by {view.name}",
+                                            "aggregator": "avg"
+                                        }
+                                    ],
+                                    "sort": {
+                                        "order_by": [
+                                            {
+                                                "type": "group",
+                                                "name": "view.name",
+                                                "order": "asc"
+                                            }
+                                        ],
+                                        "count": 500
+                                    },
+                                    "formulas": [
+                                        {
+                                            "alias": "View Count",
+                                            "cell_display_mode": "bar",
+                                            "formula": "query1"
+                                        },
+                                        {
+                                            "alias": "LT",
+                                            "cell_display_mode": "number",
+                                            "formula": "query2"
+                                        },
+                                        {
+                                            "alias": "LCP",
+                                            "cell_display_mode": "number",
+                                            "conditional_formats": [
+                                                {
+                                                    "palette": "red_on_white",
+                                                    "comparator": ">",
+                                                    "value": 4000000000
+                                                },
+                                                {
+                                                    "palette": "yellow_on_white",
+                                                    "comparator": ">",
+                                                    "value": 2500000000
+                                                },
+                                                {
+                                                    "palette": "green_on_white",
+                                                    "comparator": "<=",
+                                                    "value": 2500000000
+                                                }
+                                            ],
+                                            "formula": "query3"
+                                        },
+                                        {
+                                            "alias": "INP",
+                                            "cell_display_mode": "number",
+                                            "conditional_formats": [
+                                                {
+                                                    "palette": "red_on_white",
+                                                    "comparator": ">",
+                                                    "value": 500000000
+                                                },
+                                                {
+                                                    "palette": "yellow_on_white",
+                                                    "comparator": ">",
+                                                    "value": 200000000
+                                                },
+                                                {
+                                                    "palette": "green_on_white",
+                                                    "comparator": "<=",
+                                                    "value": 200000000
+                                                }
+                                            ],
+                                            "formula": "query4"
+                                        },
+                                        {
+                                            "alias": "FCP",
+                                            "cell_display_mode": "number",
+                                            "conditional_formats": [
+                                                {
+                                                    "palette": "red_on_white",
+                                                    "comparator": ">",
+                                                    "value": 0.25
+                                                },
+                                                {
+                                                    "palette": "yellow_on_white",
+                                                    "comparator": ">",
+                                                    "value": 0.1
+                                                },
+                                                {
+                                                    "palette": "green_on_white",
+                                                    "comparator": "<=",
+                                                    "value": 0.1
+                                                }
+                                            ],
+                                            "formula": "query5"
+                                        },
+                                        {
+                                            "alias": "CLS",
+                                            "cell_display_mode": "number",
+                                            "conditional_formats": [
+                                                {
+                                                    "palette": "red_on_white",
+                                                    "comparator": ">",
+                                                    "value": 0.25
+                                                },
+                                                {
+                                                    "palette": "yellow_on_white",
+                                                    "comparator": ">",
+                                                    "value": 0.1
+                                                },
+                                                {
+                                                    "palette": "green_on_white",
+                                                    "comparator": "<=",
+                                                    "value": 0.1
+                                                }
+                                            ],
+                                            "formula": "query6"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "has_search_bar": "never",
+                            "custom_links": [
+                                {
+                                    "link": "/dash/integration/rum_errors_browser?tpl_var_viewName={{@view.name.value}}",
+                                    "label": "Analyze errors for {{@view.name.value}}"
+                                },
+                                {
+                                    "link": "/dash/integration/rum_resource_browser_and_mobile?tpl_var_viewName={{@view.name.value}}",
+                                    "label": "View resources for {{@view.name.value}}"
+                                }
+                            ]
+                        },
+                        "layout": {
+                            "x": 0,
+                            "y": 6,
+                            "width": 12,
+                            "height": 3
+                        }
+                    }
+                ]
+            },
+            "layout": {
+                "x": 0,
+                "y": 5,
+                "width": 12,
+                "height": 10,
+                "is_column_break": true
+            }
+        }
+    ],
+    "template_variables": [
+        {
+            "name": "viewName",
+            "prefix": "@view.name",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "country",
+            "prefix": "@geo.country",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "browser",
+            "prefix": "@browser.name",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "deviceType",
+            "prefix": "@device.type",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "service",
+            "prefix": "service",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "env",
+            "prefix": "env",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "version",
+            "prefix": "version",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "applicationName",
+            "prefix": "@application.name",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "loadingType",
+            "prefix": "@view.loading_type",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "pathGroup",
+            "prefix": "@view.url_path_group",
+            "available_values": [],
+            "default": "*"
+        },
+        {
+            "name": "sessionType",
+            "prefix": "@session.type",
+            "available_values": [],
+            "default": "user"
+        }
+    ],
+    "layout_type": "ordered",
+    "notify_list": [],
+    "reflow_type": "fixed",
+    "pause_auto_refresh": false
+}
